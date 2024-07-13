@@ -1,0 +1,12 @@
+// .vscode/tasks.json
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate Swagger Docs",
+            "type": "shell",
+            "command": "swag init",
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,1248 @@
+basePath: /
+definitions:
+  models.Book:
+    properties:
+      author:
+        type: string
+      book_pdf:
+        type: string
+      cover_image:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      isbn:
+        type: string
+      publish_date:
+        type: string
+      publisher:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Manager:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      manager_id:
+        type: string
+      system_user_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.ManagerRegister:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      manager_id:
+        type: string
+      password:
+        type: string
+    type: object
+  models.ManagerUpdate:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      manager_id:
+        type: string
+    type: object
+  models.Student:
+    properties:
+      books:
+        items:
+          type: string
+        type: array
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      student_id:
+        type: string
+      subscription_id:
+        type: string
+      system_user_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.StudentRegister:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      student_id:
+        type: string
+    type: object
+  models.StudentSubscription:
+    properties:
+      created_at:
+        type: string
+      customer_id:
+        type: string
+      id:
+        type: string
+      invoice_id:
+        type: string
+      payment_link:
+        type: string
+      price_id:
+        type: string
+      status:
+        $ref: '#/definitions/models.SubscriptionStatus'
+      stripe_sub_id:
+        type: string
+      subscription_id:
+        type: string
+      system_user_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.StudentSubscriptionRequest:
+    properties:
+      subscription_id:
+        type: string
+    type: object
+  models.StudentUpdate:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      student_id:
+        type: string
+    type: object
+  models.Subscription:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      price:
+        type: number
+      price_id:
+        type: string
+      product_id:
+        type: string
+      title:
+        type: string
+      type:
+        $ref: '#/definitions/models.SubscriptionType'
+      updated_at:
+        type: string
+    type: object
+  models.SubscriptionCreateRequest:
+    properties:
+      description:
+        type: string
+      price:
+        type: number
+      title:
+        type: string
+      type:
+        $ref: '#/definitions/models.SubscriptionType'
+    required:
+    - description
+    - price
+    - title
+    - type
+    type: object
+  models.SubscriptionStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - Pending
+    - Cancelled
+    - Expired
+    - InRecurring
+  models.SubscriptionType:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - NoRecurring
+    - Monthly
+    - Quarterly
+    - Yearly
+  models.SubscriptionUpdateRequest:
+    properties:
+      description:
+        type: string
+      price:
+        type: number
+      title:
+        type: string
+      type:
+        $ref: '#/definitions/models.SubscriptionType'
+    type: object
+  models.SuccessResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.SystemUserLoginResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      is_superuser:
+        type: boolean
+      name:
+        type: string
+      role:
+        $ref: '#/definitions/models.UserRole'
+      token:
+        type: string
+    type: object
+  models.SystemUserRegister:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  models.SystemUserRegisterResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      is_superuser:
+        type: boolean
+      name:
+        type: string
+      role:
+        $ref: '#/definitions/models.UserRole'
+    type: object
+  models.UserRole:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - SuperUser
+    - ManagerRole
+    - StudentRole
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for managing a library.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Library Management API
+  version: "1.0"
+paths:
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of books
+          schema:
+            items:
+              $ref: '#/definitions/models.Book'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a list of books
+      tags:
+      - Books
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new book entry
+      parameters:
+      - description: Title
+        in: formData
+        name: Title
+        required: true
+        type: string
+      - description: Author
+        in: formData
+        name: Author
+        required: true
+        type: string
+      - description: Publisher
+        in: formData
+        name: Publisher
+        required: true
+        type: string
+      - description: PublishDate
+        in: formData
+        name: PublishDate
+        required: true
+        type: string
+      - description: ISBN
+        in: formData
+        name: ISBN
+        required: true
+        type: string
+      - description: CoverImage
+        in: formData
+        name: CoverImage
+        required: true
+        type: file
+      - description: BookPDF
+        in: formData
+        name: BookPDF
+        required: true
+        type: file
+      - collectionFormat: csv
+        description: Tags
+        in: formData
+        items:
+          type: string
+        name: Tags
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book created successfully
+          schema:
+            $ref: '#/definitions/models.Book'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new book
+      tags:
+      - Books
+  /books/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a book by ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book deleted successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Book not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a book by ID
+      tags:
+      - Books
+    get:
+      consumes:
+      - application/json
+      description: Get details of a book by ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book details
+          schema:
+            $ref: '#/definitions/models.Book'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Book not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a book by ID
+      tags:
+      - Books
+    patch:
+      consumes:
+      - multipart/form-data
+      description: Partially update details of a book by ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Title
+        in: formData
+        name: Title
+        type: string
+      - description: Author
+        in: formData
+        name: Author
+        type: string
+      - description: Publisher
+        in: formData
+        name: Publisher
+        type: string
+      - description: PublishDate
+        in: formData
+        name: PublishDate
+        type: string
+      - description: ISBN
+        in: formData
+        name: ISBN
+        type: string
+      - description: CoverImage
+        in: formData
+        name: CoverImage
+        type: file
+      - description: BookPDF
+        in: formData
+        name: BookPDF
+        type: file
+      - collectionFormat: csv
+        description: Tags
+        in: formData
+        items:
+          type: string
+        name: Tags
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated book details
+          schema:
+            $ref: '#/definitions/models.Book'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Book not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Partially update a book by ID
+      tags:
+      - Books
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update details of a book by ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Title
+        in: formData
+        name: Title
+        required: true
+        type: string
+      - description: Author
+        in: formData
+        name: Author
+        required: true
+        type: string
+      - description: Publisher
+        in: formData
+        name: Publisher
+        required: true
+        type: string
+      - description: PublishDate
+        in: formData
+        name: PublishDate
+        required: true
+        type: string
+      - description: ISBN
+        in: formData
+        name: ISBN
+        required: true
+        type: string
+      - description: CoverImage
+        in: formData
+        name: CoverImage
+        required: true
+        type: file
+      - description: BookPDF
+        in: formData
+        name: BookPDF
+        required: true
+        type: file
+      - collectionFormat: csv
+        description: Tags
+        in: formData
+        items:
+          type: string
+        name: Tags
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated book details
+          schema:
+            $ref: '#/definitions/models.Book'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Book not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a book by ID
+      tags:
+      - Books
+  /managers:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all managers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of managers
+          schema:
+            items:
+              $ref: '#/definitions/models.Manager'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a list of managers
+      tags:
+      - Managers
+    post:
+      consumes:
+      - application/json
+      description: Register a new manager entry
+      parameters:
+      - description: Manager object to be registered
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/models.ManagerRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Manager registered successfully
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Register a new manager
+      tags:
+      - Managers
+  /managers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a manager by ID
+      parameters:
+      - description: Manager ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Manager deleted successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Manager not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a manager by ID
+      tags:
+      - Managers
+    get:
+      consumes:
+      - application/json
+      description: Get details of a manager by ID
+      parameters:
+      - description: Manager ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Manager details
+          schema:
+            $ref: '#/definitions/models.Manager'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Manager not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a manager by ID
+      tags:
+      - Managers
+    patch:
+      consumes:
+      - application/json
+      description: Partially update details of a manager by ID
+      parameters:
+      - description: Manager ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Manager object to be registered
+        in: body
+        name: manager
+        required: true
+        schema:
+          $ref: '#/definitions/models.ManagerUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated manager details
+          schema:
+            $ref: '#/definitions/models.Manager'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: manager not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Partially update a manager by ID
+      tags:
+      - Managers
+    put:
+      consumes:
+      - application/json
+      description: Update details of a manager by ID
+      parameters:
+      - description: Manager ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Manager object to be registered
+        in: body
+        name: manager
+        required: true
+        schema:
+          $ref: '#/definitions/models.ManagerUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated manager details
+          schema:
+            $ref: '#/definitions/models.Manager'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: manager not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a manager by ID
+      tags:
+      - Managers
+  /students:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all students
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of students
+          schema:
+            items:
+              $ref: '#/definitions/models.Student'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a list of students
+      tags:
+      - Students
+    post:
+      consumes:
+      - application/json
+      description: Register a new student entry
+      parameters:
+      - description: Student object to be registered
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/models.StudentRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student registered successfully
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Register a new student
+      tags:
+      - Students
+  /students/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a student by ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student deleted successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Student not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a student by ID
+      tags:
+      - Students
+    get:
+      consumes:
+      - application/json
+      description: Get details of a student by ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student details
+          schema:
+            $ref: '#/definitions/models.Student'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Student not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a student by ID
+      tags:
+      - Students
+    patch:
+      consumes:
+      - application/json
+      description: Partially update details of a student by ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Student object to be registered
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/models.StudentUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated student details
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: student not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Partially update a student by ID
+      tags:
+      - Students
+    put:
+      consumes:
+      - application/json
+      description: Update details of a student by ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Student object to be registered
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/models.StudentUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated student details
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: student not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a student by ID
+      tags:
+      - Students
+  /subscriptions:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all subscriptions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of subscriptions
+          schema:
+            items:
+              $ref: '#/definitions/models.Subscription'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a list of subscriptions
+      tags:
+      - Subscriptions
+    post:
+      consumes:
+      - application/json
+      description: Create a new subscription entry
+      parameters:
+      - description: Subscription object to be registered
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/models.SubscriptionCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Subscription registered successfully
+          schema:
+            $ref: '#/definitions/models.Subscription'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new subscription
+      tags:
+      - Subscriptions
+  /subscriptions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a subscription by ID
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Subscription deleted successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Subscription not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a subscription by ID
+      tags:
+      - Subscriptions
+    get:
+      consumes:
+      - application/json
+      description: Get details of a subscription by ID
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Subscription details
+          schema:
+            $ref: '#/definitions/models.Subscription'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Subscription not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a subscription by ID
+      tags:
+      - Subscriptions
+    put:
+      consumes:
+      - application/json
+      description: Update details of a subscription by ID
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Subscription object to be registered
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/models.SubscriptionUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated subscription details
+          schema:
+            $ref: '#/definitions/models.Subscription'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: subscription not found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a subscription by ID
+      tags:
+      - Subscriptions
+  /subscriptions/student/subscribe:
+    post:
+      consumes:
+      - application/json
+      description: Student subscribe to a subscription
+      parameters:
+      - description: Student is Subscribeing
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/models.StudentSubscriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Subscription registered successfully
+          schema:
+            $ref: '#/definitions/models.StudentSubscription'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Student subscribe to a subscription
+      tags:
+      - Subscriptions
+  /user/login:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Logs in the user and returns a JWT token
+      parameters:
+      - description: Email
+        in: formData
+        name: Email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: Password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successfully
+          schema:
+            $ref: '#/definitions/models.SystemUserLoginResponse'
+        "400":
+          description: Invalid username or password
+          schema:
+            type: string
+      summary: Log in
+      tags:
+      - Authentication
+  /user/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out the user and invalidates the JWT token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout successful
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Log out
+      tags:
+      - Authentication
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user with hashed password
+      parameters:
+      - description: User object to be created
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.SystemUserRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User registered successfully
+          schema:
+            $ref: '#/definitions/models.SystemUserRegisterResponse'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+      summary: Register a new user
+      tags:
+      - Authentication
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
