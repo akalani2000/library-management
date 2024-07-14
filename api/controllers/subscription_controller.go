@@ -3,7 +3,6 @@ package controllers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"library_management/api/database"
 	"library_management/api/models"
@@ -428,7 +427,7 @@ func StudentSubscription(c *gin.Context) {
 		return
 	}
 
-	insertedID := fmt.Sprintf("%v", insert_results.InsertedID)
+	insertedID := insert_results.InsertedID.(primitive.ObjectID).Hex()
 
 	// Create a Stripe Checkout Session
 	checkoutParams := &stripe.CheckoutSessionParams{
@@ -532,8 +531,6 @@ func StripeWebhookHandler(c *gin.Context) {
 				return
 			}
 
-			fmt.Println("subscriptionID:", subscriptionID)
-
 			// Convert subscriptionID to ObjectID
 			objID, err := primitive.ObjectIDFromHex(subscriptionID)
 			if err != nil {
@@ -546,13 +543,7 @@ func StripeWebhookHandler(c *gin.Context) {
 			update := bson.M{"payment_status": models.Paid, "status": models.Subscribed, "stripe_sub_id": session.Subscription.ID}
 			var student_subscription_webhook models.StudentSubscription
 			student_subscription_collection.FindOne(ctx, filter).Decode(&student_subscription_webhook)
-			update_success, err := student_subscription_collection.UpdateOne(ctx, filter, bson.M{"$set": update})
-			fmt.Println("update_success", update_success)
-			fmt.Println("session.Metadata['student_subscription_id']", session.Metadata["student_subscription_id"])
-			fmt.Println("err", err)
-			fmt.Println("=================================================")
-			fmt.Println("student_subscription_webhook")
-			fmt.Println(student_subscription_webhook)
+			_, err = student_subscription_collection.UpdateOne(ctx, filter, bson.M{"$set": update})
 			if err != nil {
 				log.Printf("Error while updaing the data: %v\n", err)
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Error while updating the data", "errormessage": err})
